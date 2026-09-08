@@ -1,4 +1,5 @@
 set SRCDIR=%CD%\src
+set CHOPPERLIBDIR=%CD%\chopperlib
 
 @REM A few (silent) sanity checks that variables are set and meaningful:
 if exist %PREFIX%\ echo %PREFIX% is in place
@@ -36,6 +37,7 @@ cmake ^
     -DENABLE_COMPONENTS=ON ^
     -DENSURE_MCPL=OFF ^
     -DENSURE_NCRYSTAL=OFF ^
+    -DFETCHCONTENT_SOURCE_DIR_CHOPPERLIB=%CHOPPERLIBDIR% ^
     -DENABLE_CIF2HKL=OFF ^
     -DENABLE_NEUTRONICS=OFF ^
     -DBUILD_SHARED_LIBS=ON ^
@@ -53,6 +55,9 @@ cmake --build . --target install --config Release
 @REM test -f "${PREFIX}/bin/mcrun"
 @REM test -f "${PREFIX}/share/mcstas/tools/Python/mccodelib/__init__.py"
 @REM test -d "${PREFIX}/share/mcstas/resources/data"
+@REM test -f "${PREFIX}/share/mcstas/resources/share/chopper-lib.c"
+@REM test -f "${PREFIX}/share/mcstas/resources/contrib/NXdisk_chopper.comp"
+@REM test -f "${PREFIX}/share/mcstas/resources/examples/Tests_optics/NXdisk_chopper_image/NXdisk_chopper_image.instr"
 
 @REM Data files will be provided in mcstas-data package instead:
 rd /s /q %PREFIX%\share\mcstas\resources\data

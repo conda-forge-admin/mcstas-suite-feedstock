@@ -1,4 +1,5 @@
 {% set version = "3.7.25" %}
+{% set chopperlib_version = "v4.0.0" %}
 
 package:
   name: mcstas-suite
@@ -7,9 +8,20 @@ package:
 # sha256 value manually found by 
 # curl -sL url | openssl sha256
 source:
-  url: https://github.com/mccode-dev/McCode/archive/v{{ version }}.tar.gz
-  sha256: b90618513f20459316e44e8392dede96b3037d1665f272bd8394cc0d8600124c
-  folder: src
+  - url: https://github.com/mccode-dev/McCode/archive/v{{ version }}.tar.gz
+    sha256: b90618513f20459316e44e8392dede96b3037d1665f272bd8394cc0d8600124c
+    folder: src
+  # Contributed mcstas-chopper-lib (Greg Tucker), pinned by tag rather than
+  # url+sha256: the repo has no stable release tarball checksum workflow yet,
+  # and pinning the git rev keeps a version bump to a one-line edit above
+  # instead of also requiring a sha256 recompute. Populated here (rather than
+  # left to McCode's own live FetchContent, see cmake/Modules/ChopperLib.cmake
+  # upstream) so the conda-forge build is reproducible/offline and its
+  # provenance is auditable from this recipe.
+  - git_url: https://github.com/mcdotstar/mcstas-chopper-lib.git
+    git_rev: {{ chopperlib_version }}
+    git_depth: 1
+    folder: chopperlib
 
 build:
   number: 0

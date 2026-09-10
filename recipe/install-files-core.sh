@@ -6,11 +6,14 @@ set -u
 set -x
 
 SRCDIR="$PWD/src"
+CHOPPERLIBDIR="$PWD/chopperlib"
 
 #A few (silent) sanity checks that variables are set and meaningful:
 test -d "${PREFIX}"
 test -d ${SRCDIR}
 test -f ${SRCDIR}/CMakeLists.txt
+test -d ${CHOPPERLIBDIR}
+test -f ${CHOPPERLIBDIR}/chopper-lib.c
 test -n "${PKG_VERSION}"
 
 for i in $(seq 1 100000); do
@@ -39,6 +42,7 @@ cmake \
     -DENABLE_COMPONENTS=ON \
     -DENSURE_MCPL=OFF \
     -DENSURE_NCRYSTAL=OFF \
+    -DFETCHCONTENT_SOURCE_DIR_CHOPPERLIB="${CHOPPERLIBDIR}" \
     -DENABLE_CIF2HKL=OFF \
     -DENABLE_NEUTRONICS=OFF \
     -DBUILD_SHARED_LIBS=ON \
@@ -54,6 +58,12 @@ test -f "${PREFIX}/bin/mcstas"
 test -f "${PREFIX}/bin/mcrun"
 test -f "${PREFIX}/share/mcstas/tools/Python/mccodelib/__init__.py"
 test -d "${PREFIX}/share/mcstas/resources/data"
+
+# mcstas-chopper-lib made it into the three resource locations it belongs in
+# (see cmake/Modules/ChopperLib.cmake upstream):
+test -f "${PREFIX}/share/mcstas/resources/share/chopper-lib.c"
+test -f "${PREFIX}/share/mcstas/resources/contrib/NXdisk_chopper.comp"
+test -f "${PREFIX}/share/mcstas/resources/examples/Tests_optics/NXdisk_chopper_image/NXdisk_chopper_image.instr"
 
 #Data files will be provided in mcstas-data package instead:
 rm -rf "${PREFIX}/share/mcstas/resources/data"

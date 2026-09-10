@@ -1,5 +1,5 @@
 {% set version = "3.7.25" %}
-{% set chopperlib_version = "v4.0.0" %}
+{% set chopperlib_version = "v4.1.0" %}
 
 package:
   name: mcstas-suite

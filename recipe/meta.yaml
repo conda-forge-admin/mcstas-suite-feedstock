@@ -17,10 +17,15 @@ source:
   # instead of also requiring a sha256 recompute. Populated here (rather than
   # left to McCode's own live FetchContent, see cmake/Modules/ChopperLib.cmake
   # upstream) so the conda-forge build is reproducible/offline and its
-  # provenance is auditable from this recipe.
+  # provenance is auditable from this recipe. Deliberately NOT shallow (no
+  # git_depth): conda-build's git source fetcher does `git clone --mirror
+  # --depth N` for the *cache* clone, which only pulls the shallow history of
+  # the default branch (chopper-lib's is `main`) -- v4.0.0 isn't its tip, so a
+  # depth-limited mirror never contains the tag, and the later `git checkout
+  # v4.0.0` fails with "pathspec 'v4.0.0' did not match any file(s) known to
+  # git". The repo is tiny, so a full mirror clone costs nothing.
   - git_url: https://github.com/mcdotstar/mcstas-chopper-lib.git
     git_rev: {{ chopperlib_version }}
-    git_depth: 1
     folder: chopperlib
 
 build:
